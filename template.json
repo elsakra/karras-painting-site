@@ -1,0 +1,35 @@
+{
+  "id": "accounting-firm",
+  "name": "Enterprise Accounting Firm",
+  "industry": "consulting",
+  "tags": ["accounting", "CPA", "tax", "audit", "advisory", "enterprise", "corporate", "professional-services"],
+  "description": "Corporate accounting firm template inspired by BDO: dark hero carousel, mega navigation, services grid, industry verticals, curated insights, careers section, and office locator.",
+  "status": "approved",
+  "heroMedia": "either",
+  "pages": [
+    "home",
+    "about",
+    "services",
+    "industries",
+    "insights",
+    "careers",
+    "locations",
+    "contact",
+    "faq",
+    "privacy",
+    "terms"
+  ],
+  "contentCollections": [
+    "services",
+    "industries",
+    "insights",
+    "locations",
+    "team",
+    "testimonials",
+    "faq"
+  ],
+  "previewUrl": null,
+  "sourceInspiration": "https://www.bdo.com/",
+  "createdAt": "2026-01-19",
+  "updatedAt": "2026-01-19"
+}

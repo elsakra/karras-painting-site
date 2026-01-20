@@ -1,0 +1,62 @@
+{
+  "company": {
+    "name": "KARRAS PAINTING L.L.C.",
+    "tagline": "Voted #1 painting company in the Ohio Valley!",
+    "description": "Karras Painting LLC, one of the oldest and most respected painting companies in the Ohio Valley, was started in 1943 by Michael Karras. Through the years, we have completed major projects including the Wesbanco Arena, Wheeling Downs Racetrack, West Liberty University facilities, and many other commercial and institutional buildings.",
+    "phone": null,
+    "email": null,
+    "address": "Ohio Valley",
+    "hours": null
+  },
+  "branding": {
+    "logo": "https://res.cloudinary.com/dil14r8je/image/upload/v1768941985/auto-site-builder/Karras%20Painting/image_0.jpg",
+    "primaryColor": "#1e40af",
+    "secondaryColor": null
+  },
+  "hero": {
+    "headline": "Voted #1 Painting Company in the Ohio Valley!",
+    "subheadline": "Subcontractor of the Year at the inaugural Excellence in Construction Awards! Most respected painting company serving the Ohio Valley since 1943.",
+    "cta": {
+      "label": "Contact Us",
+      "href": "/contact"
+    },
+    "secondaryCta": null,
+    "backgroundImage": "https://plus.unsplash.com/premium_photo-1661663373098-003886896551?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8MXx8cHJvZmVzc2lvbmFsJTIwd29ya3NwYWNlJTIwY2xlYW58ZW58MHwwfHx8MTc2ODg2NTI3MXww&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  "sections": {
+    "about": {
+      "headline": "About Us",
+      "content": "Karras Painting LLC, one of the oldest and most respected painting companies in the Ohio Valley, was started in 1943 by Michael Karras. Formerly a ship's captain in the Greek Merchant Marines, Karras came to America as a young man and settled in the Ohio Valley. Through the years, sons Nick and John Karras ran the company, with John also serving in the West Virginia House and State Senate. Since 2012, the company has been operated by Shawn Zoladz, expanding services and areas of operation. We have completed major projects including the Wesbanco Arena, Wheeling Downs Racetrack, West Liberty University facilities, FBI Service Center, and many commercial developments.",
+      "image": "https://res.cloudinary.com/dil14r8je/image/upload/v1768941985/auto-site-builder/Karras%20Painting/image_0.jpg"
+    },
+    "services": {
+      "headline": "Our Services"
+    },
+    "team": {
+      "headline": "Our Team"
+    },
+    "testimonials": {
+      "headline": "What Our Clients Say"
+    },
+    "contact": {
+      "headline": "Contact Us"
+    }
+  },
+  "navigation": {
+    "items": [],
+    "ctaButton": {
+      "label": "Contact Us",
+      "href": "/contact"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 KARRAS PAINTING L.L.C. All rights reserved.",
+    "socialLinks": {
+      "facebook": null
+    }
+  },
+  "seo": {
+    "title": "KARRAS PAINTING L.L.C. - Home",
+    "description": null
+  }
+}

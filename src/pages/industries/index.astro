@@ -1,0 +1,103 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
+import siteData from '@/data/site.json';
+import { getCollection } from 'astro:content';
+
+const industries = await getCollection('industries');
+const sortedIndustries = industries.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+---
+
+<BaseLayout title="Industries">
+  <!-- Hero -->
+  <section class="pt-32 pb-16 bg-charcoal-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          Industries We Serve
+        </h1>
+        <p class="mt-6 text-xl text-slate-300 leading-relaxed">
+          Deep sector expertise combined with technical excellence—delivering solutions tailored to your industry's unique challenges.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries Grid -->
+  <section class="py-16 lg:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sortedIndustries.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedIndustries.map((industry) => (
+            <a 
+              href={`/industries/${industry.slug}`}
+              class="group block bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all card-hover"
+            >
+              {industry.data.image ? (
+                <div class="aspect-[16/9] overflow-hidden bg-slate-100">
+                  <img 
+                    src={industry.data.image} 
+                    alt={industry.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              ) : (
+                <div class="aspect-[16/9] bg-gradient-to-br from-charcoal-800 to-navy-900 flex items-center justify-center">
+                  <svg class="w-12 h-12 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                  </svg>
+                </div>
+              )}
+              <div class="p-6">
+                <h2 class="font-display text-xl font-bold text-charcoal-900 group-hover:text-crimson-600 transition-colors">
+                  {industry.data.title}
+                </h2>
+                
+                {industry.data.shortDescription && (
+                  <p class="mt-2 text-slate-600 text-sm line-clamp-3">
+                    {industry.data.shortDescription}
+                  </p>
+                )}
+                
+                <span class="mt-4 inline-flex items-center text-crimson-600 font-semibold text-sm">
+                  Learn More
+                  <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-xl text-slate-600">
+            Industry information coming soon. Please contact us for details.
+          </p>
+          <div class="mt-8">
+            <Button href="/contact" style="primary">
+              Contact Us
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 lg:py-24 bg-slate-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-charcoal-900">
+        Don't see your industry?
+      </h2>
+      <p class="mt-4 text-xl text-slate-600">
+        Our team has experience across many sectors. Let's discuss how we can support your specific needs.
+      </p>
+      <div class="mt-10">
+        <Button href="/contact" style="primary" size="lg">
+          Contact Us
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

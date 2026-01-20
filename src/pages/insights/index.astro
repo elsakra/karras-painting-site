@@ -1,0 +1,177 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
+import siteData from '@/data/site.json';
+import { getCollection } from 'astro:content';
+
+const insights = await getCollection('insights');
+const sortedInsights = insights.sort((a, b) => 
+  new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+);
+
+const { sections } = siteData;
+const categories = sections.insights?.categories || [];
+
+// Get URL params for filtering
+const url = Astro.url;
+const categoryParam = url.searchParams.get('category');
+
+// Filter insights if category is specified
+const filteredInsights = categoryParam 
+  ? sortedInsights.filter(i => i.data.category === categoryParam)
+  : sortedInsights;
+---
+
+<BaseLayout title="Insights">
+  <!-- Hero -->
+  <section class="pt-32 pb-16 bg-charcoal-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
+          {sections.insights?.headline || "Insights"}
+        </h1>
+        {sections.insights?.description && (
+          <p class="mt-6 text-xl text-slate-300 leading-relaxed">
+            {sections.insights.description}
+          </p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Tabs -->
+  {categories.length > 0 && (
+    <section class="bg-white border-b border-slate-200 sticky top-[106px] z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap gap-2 py-4">
+          <a 
+            href="/insights"
+            class:list={[
+              "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+              !categoryParam 
+                ? "bg-crimson-600 text-white" 
+                : "bg-slate-100 text-charcoal-700 hover:bg-slate-200"
+            ]}
+          >
+            All Insights
+          </a>
+          {categories.map((cat) => (
+            <a 
+              href={`/insights?category=${cat.id}`}
+              class:list={[
+                "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+                categoryParam === cat.id 
+                  ? "bg-crimson-600 text-white" 
+                  : "bg-slate-100 text-charcoal-700 hover:bg-slate-200"
+              ]}
+            >
+              {cat.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Insights Grid -->
+  <section class="py-16 lg:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {filteredInsights.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredInsights.map((insight) => (
+            <a 
+              href={`/insights/${insight.slug}`}
+              class="group block bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all card-hover"
+            >
+              {insight.data.image ? (
+                <div class="aspect-[16/9] overflow-hidden bg-slate-100">
+                  <img 
+                    src={insight.data.image} 
+                    alt={insight.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              ) : (
+                <div class="aspect-[16/9] bg-gradient-to-br from-charcoal-800 to-navy-900"></div>
+              )}
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-3">
+                  {insight.data.category && (
+                    <span class="inline-block px-3 py-1 text-xs font-medium text-crimson-600 bg-crimson-50 rounded-full">
+                      {insight.data.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </span>
+                  )}
+                  {insight.data.readTime && (
+                    <span class="text-xs text-slate-500">{insight.data.readTime}</span>
+                  )}
+                </div>
+                
+                <h2 class="font-display text-lg font-bold text-charcoal-900 group-hover:text-crimson-600 transition-colors line-clamp-2">
+                  {insight.data.title}
+                </h2>
+                
+                {insight.data.excerpt && (
+                  <p class="mt-2 text-slate-600 text-sm line-clamp-3">
+                    {insight.data.excerpt}
+                  </p>
+                )}
+                
+                <div class="mt-4 flex items-center justify-between">
+                  <div class="text-sm text-slate-500">
+                    {new Date(insight.data.publishedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </div>
+                  <span class="text-crimson-600 font-medium text-sm flex items-center">
+                    Read More
+                    <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-xl text-slate-600">
+            No insights found{categoryParam ? ' for this category' : ''}. Check back soon!
+          </p>
+          {categoryParam && (
+            <div class="mt-8">
+              <Button href="/insights" style="outline">
+                View All Insights
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="py-16 lg:py-24 bg-slate-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-charcoal-900">
+        Stay informed
+      </h2>
+      <p class="mt-4 text-xl text-slate-600">
+        Subscribe to receive the latest insights and updates delivered to your inbox.
+      </p>
+      <div class="mt-10">
+        <button 
+          type="button"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-charcoal-900 text-white font-semibold rounded hover:bg-charcoal-800 transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Subscribe to Newsletter
+        </button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

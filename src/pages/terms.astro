@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import siteData from '@/data/site.json';
+
+const { company } = siteData;
+const lastUpdated = "January 1, 2025";
+---
+
+<BaseLayout title="Terms of Service">
+  <section class="pt-32 pb-16 bg-charcoal-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="font-display text-4xl sm:text-5xl font-bold text-white">
+        Terms of Service
+      </h1>
+      <p class="mt-4 text-slate-400">
+        Last updated: {lastUpdated}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-lg max-w-none prose-headings:font-display prose-headings:text-charcoal-900 prose-headings:font-bold prose-p:text-slate-700 prose-li:text-slate-700 prose-a:text-crimson-600">
+        <p class="lead text-lg text-slate-600">
+          Welcome to {company.name}. By accessing or using our services, you agree to be bound by these Terms of Service. Please read them carefully.
+        </p>
+
+        <h2>Acceptance of Terms</h2>
+        <p>By using our website, engaging our services, or otherwise interacting with {company.name}, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and our Privacy Policy.</p>
+
+        <h2>Services Description</h2>
+        <p>{company.name} provides professional accounting, tax, audit, and advisory services. Our services are designed to help businesses and individuals meet their financial, compliance, and strategic objectives.</p>
+
+        <h2>Professional Standards</h2>
+        <p>All services are provided in accordance with applicable professional standards, including:</p>
+        <ul>
+          <li>Generally Accepted Accounting Principles (GAAP)</li>
+          <li>Generally Accepted Auditing Standards (GAAS)</li>
+          <li>Internal Revenue Service regulations</li>
+          <li>State and local regulatory requirements</li>
+          <li>AICPA Code of Professional Conduct</li>
+        </ul>
+
+        <h2>Engagement Terms</h2>
+        <ul>
+          <li><strong>Engagement Letters:</strong> Specific services will be governed by engagement letters that define scope, fees, and deliverables.</li>
+          <li><strong>Client Responsibilities:</strong> Clients are responsible for providing accurate and complete information necessary for us to perform our services.</li>
+          <li><strong>Independence:</strong> For attest engagements, we must maintain independence as required by professional standards.</li>
+        </ul>
+
+        <h2>Fees and Payment</h2>
+        <ul>
+          <li>Fees are outlined in engagement letters or fee estimates provided before work begins.</li>
+          <li>Payment terms are typically net 30 days from invoice date unless otherwise agreed.</li>
+          <li>Late payments may be subject to interest charges as specified in your engagement letter.</li>
+          <li>We reserve the right to suspend services for overdue accounts.</li>
+        </ul>
+
+        <h2>Client Responsibilities</h2>
+        <p>As a client, you agree to:</p>
+        <ul>
+          <li>Provide accurate, complete, and timely information</li>
+          <li>Respond to requests for information in a timely manner</li>
+          <li>Review and approve deliverables promptly</li>
+          <li>Inform us of any changes that may affect our services</li>
+          <li>Maintain appropriate internal controls and record-keeping</li>
+        </ul>
+
+        <h2>Confidentiality</h2>
+        <p>We are committed to maintaining the confidentiality of client information in accordance with professional standards and applicable law. We will not disclose confidential information without your consent except as required by law or professional standards.</p>
+
+        <h2>Limitations of Services</h2>
+        <p>Our services are not intended to:</p>
+        <ul>
+          <li>Detect fraud or illegal acts, unless specifically engaged to do so</li>
+          <li>Guarantee specific outcomes or audit opinions</li>
+          <li>Provide legal advice (we recommend consulting with an attorney for legal matters)</li>
+        </ul>
+
+        <h2>Intellectual Property</h2>
+        <p>All content on our website, including text, graphics, logos, and images, is the property of {company.name} and is protected by copyright and trademark laws. Methodologies, workpapers, and other materials developed by us remain our property.</p>
+
+        <h2>Limitation of Liability</h2>
+        <p>To the fullest extent permitted by law, {company.name}'s liability shall be limited to the fees paid for the specific service giving rise to the claim. We shall not be liable for any indirect, incidental, special, or consequential damages.</p>
+
+        <h2>Dispute Resolution</h2>
+        <p>Any disputes arising from these terms or our services shall first be addressed through good-faith negotiation. If resolution cannot be reached, disputes will be submitted to binding arbitration in accordance with applicable rules.</p>
+
+        <h2>Changes to Terms</h2>
+        <p>We reserve the right to modify these Terms of Service at any time. Changes will be effective immediately upon posting. Your continued use of our services constitutes acceptance of the modified terms.</p>
+
+        <h2>Governing Law</h2>
+        <p>These Terms of Service shall be governed by and construed in accordance with the laws of the state in which our principal office is located, without regard to conflict of law principles.</p>
+
+        <h2>Contact Information</h2>
+        <p>If you have questions about these Terms of Service, please contact us:</p>
+        <p>
+          {company.name}<br />
+          Email: {company.email}<br />
+          Phone: {company.phone}
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

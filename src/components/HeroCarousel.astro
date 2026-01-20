@@ -1,0 +1,235 @@
+---
+import siteData from '@/data/site.json';
+
+interface Slide {
+  headline: string;
+  subheadline?: string;
+  image?: string;
+  cta?: {
+    label: string;
+    href: string;
+  };
+}
+
+// Support both slides array format AND single hero object format
+const slides: Slide[] = siteData.hero?.slides || (siteData.hero?.headline ? [{
+  headline: siteData.hero.headline,
+  subheadline: siteData.hero.subheadline,
+  image: siteData.hero.backgroundImage || siteData.hero.image,
+  cta: siteData.hero.cta
+}] : []);
+---
+
+<section class="relative bg-charcoal-900 overflow-hidden">
+  <div class="hero-carousel" data-carousel>
+    {slides.map((slide, index) => (
+      <div 
+        class:list={[
+          "carousel-slide absolute inset-0",
+          index === 0 ? "opacity-100 z-10" : "opacity-0 z-0"
+        ]}
+        data-slide={index}
+      >
+        {/* Background Image */}
+        {slide.image ? (
+          <div class="absolute inset-0">
+            <img 
+              src={slide.image} 
+              alt="" 
+              class="w-full h-full object-cover"
+            />
+            <div class="hero-overlay absolute inset-0"></div>
+          </div>
+        ) : (
+          <div class="absolute inset-0 bg-hero-pattern"></div>
+        )}
+        
+        {/* Content */}
+        <div class="relative h-full flex items-center">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 w-full">
+            <div class="max-w-3xl">
+              <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight">
+                {slide.headline}
+              </h1>
+              {slide.subheadline && (
+                <p class="mt-6 text-lg sm:text-xl text-slate-300 leading-relaxed max-w-2xl">
+                  {slide.subheadline}
+                </p>
+              )}
+              {slide.cta && (
+                <div class="mt-8">
+                  <a 
+                    href={slide.cta.href}
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-crimson-600 text-white font-semibold rounded hover:bg-crimson-700 transition-colors"
+                  >
+                    {slide.cta.label}
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+  
+  {/* Navigation arrows */}
+  {slides.length > 1 && (
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex items-center justify-between">
+          {/* Slide indicators */}
+          <div class="flex items-center gap-3">
+            {slides.map((_, index) => (
+              <button
+                type="button"
+                class:list={[
+                  "carousel-indicator w-12 h-1 rounded-full transition-all duration-300",
+                  index === 0 ? "bg-white" : "bg-white/30 hover:bg-white/50"
+                ]}
+                data-indicator={index}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+          
+          {/* Arrow controls */}
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="carousel-prev p-2 text-white/60 hover:text-white transition-colors"
+              aria-label="Previous slide"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="carousel-next p-2 text-white/60 hover:text-white transition-colors"
+              aria-label="Next slide"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+  
+  {/* Scroll indicator */}
+  <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 hidden lg:block">
+    <div class="flex flex-col items-center gap-2 text-white/40">
+      <svg class="w-5 h-5 animate-bounce" style="animation-duration: 2s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-carousel {
+    position: relative;
+    min-height: 500px;
+    height: 70vh;
+    max-height: 700px;
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-carousel {
+      min-height: 600px;
+      height: 75vh;
+      max-height: 800px;
+    }
+  }
+</style>
+
+<script>
+  class HeroCarousel {
+    private carousel: HTMLElement;
+    private slides: NodeListOf<HTMLElement>;
+    private indicators: NodeListOf<HTMLButtonElement>;
+    private prevBtn: HTMLButtonElement | null;
+    private nextBtn: HTMLButtonElement | null;
+    private currentIndex: number = 0;
+    private autoplayInterval: number | null = null;
+    private autoplayDelay: number = 6000;
+
+    constructor(element: HTMLElement) {
+      this.carousel = element;
+      this.slides = element.querySelectorAll('[data-slide]');
+      this.indicators = element.parentElement?.querySelectorAll('.carousel-indicator') as NodeListOf<HTMLButtonElement>;
+      this.prevBtn = element.parentElement?.querySelector('.carousel-prev') ?? null;
+      this.nextBtn = element.parentElement?.querySelector('.carousel-next') ?? null;
+      
+      this.init();
+    }
+
+    private init() {
+      // Set up event listeners
+      this.prevBtn?.addEventListener('click', () => this.prev());
+      this.nextBtn?.addEventListener('click', () => this.next());
+      
+      this.indicators?.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => this.goTo(index));
+      });
+
+      // Start autoplay
+      this.startAutoplay();
+
+      // Pause on hover
+      this.carousel.parentElement?.addEventListener('mouseenter', () => this.stopAutoplay());
+      this.carousel.parentElement?.addEventListener('mouseleave', () => this.startAutoplay());
+    }
+
+    private goTo(index: number) {
+      if (index === this.currentIndex) return;
+      
+      // Hide current slide
+      this.slides[this.currentIndex].classList.remove('opacity-100', 'z-10');
+      this.slides[this.currentIndex].classList.add('opacity-0', 'z-0');
+      this.indicators[this.currentIndex]?.classList.remove('bg-white');
+      this.indicators[this.currentIndex]?.classList.add('bg-white/30');
+
+      // Show new slide
+      this.currentIndex = index;
+      this.slides[this.currentIndex].classList.remove('opacity-0', 'z-0');
+      this.slides[this.currentIndex].classList.add('opacity-100', 'z-10');
+      this.indicators[this.currentIndex]?.classList.remove('bg-white/30');
+      this.indicators[this.currentIndex]?.classList.add('bg-white');
+    }
+
+    private next() {
+      const nextIndex = (this.currentIndex + 1) % this.slides.length;
+      this.goTo(nextIndex);
+    }
+
+    private prev() {
+      const prevIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+      this.goTo(prevIndex);
+    }
+
+    private startAutoplay() {
+      if (this.slides.length <= 1) return;
+      this.autoplayInterval = window.setInterval(() => this.next(), this.autoplayDelay);
+    }
+
+    private stopAutoplay() {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+        this.autoplayInterval = null;
+      }
+    }
+  }
+
+  // Initialize carousel
+  const carouselElement = document.querySelector('[data-carousel]') as HTMLElement;
+  if (carouselElement) {
+    new HeroCarousel(carouselElement);
+  }
+</script>

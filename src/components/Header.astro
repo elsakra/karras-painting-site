@@ -1,0 +1,215 @@
+---
+import siteData from '@/data/site.json';
+const { navigation, company, branding } = siteData;
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50">
+  <!-- Utility bar - gray background like BDO -->
+  <div class="bg-slate-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-end h-8 text-xs">
+        <nav class="flex items-center gap-1">
+          {navigation.secondaryNav?.map((item, i) => (
+            <>
+              <a href={item.href} class="px-2 py-1 text-slate-200 hover:text-white transition-colors">
+                {item.label}
+              </a>
+              {i < (navigation.secondaryNav?.length || 0) - 1 && (
+                <span class="text-slate-400">|</span>
+              )}
+            </>
+          ))}
+          <span class="text-slate-400 ml-1">|</span>
+          <a href="/contact" class="px-2 py-1 text-slate-200 hover:text-white transition-colors">
+            Contact
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main navigation - white background -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-[72px]">
+        <!-- Logo with company name -->
+        <a href="/" class="flex items-center gap-3 flex-shrink-0">
+          <img src={branding.logo} alt={company.name} class="h-10 lg:h-12 w-auto" />
+          <span class="font-display text-lg lg:text-xl font-bold text-charcoal tracking-tight">
+            {company.name}
+          </span>
+        </a>
+        
+        <!-- Desktop: Search + Hamburger only (like BDO) -->
+        <div class="flex items-center gap-4">
+          <!-- Search Button -->
+          <button 
+            type="button" 
+            class="p-2 text-charcoal hover:text-crimson transition-colors"
+            aria-label="Search"
+            id="search-toggle"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+          
+          <!-- Menu Button -->
+          <button 
+            type="button"
+            class="p-2 text-charcoal hover:text-crimson transition-colors"
+            aria-label="Open menu"
+            id="menu-button"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" id="menu-icon-open">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" id="menu-icon-close">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Full-screen Menu Overlay -->
+  <div class="fixed inset-0 bg-charcoal-900 z-40 hidden" id="menu-overlay">
+    <div class="h-full overflow-y-auto">
+      <!-- Menu Header -->
+      <div class="bg-charcoal-900 border-b border-charcoal-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16 lg:h-[72px]">
+            <a href="/" class="flex items-center gap-3">
+              <img src={branding.logo} alt={company.name} class="h-10 lg:h-12 w-auto brightness-0 invert" />
+            <span class="font-display text-lg lg:text-xl font-bold text-white tracking-tight">
+              {company.name}
+            </span>
+            </a>
+            <button 
+              type="button"
+              class="p-2 text-white hover:text-crimson transition-colors"
+              aria-label="Close menu"
+              id="menu-close"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Menu Content -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid lg:grid-cols-2 gap-12">
+          <!-- Main Navigation -->
+          <div>
+            <nav class="space-y-1">
+              {navigation.items.map((item) => (
+                <div class="menu-nav-item">
+                  <a 
+                    href={item.href}
+                    class="group flex items-center justify-between py-4 border-b border-charcoal-700"
+                  >
+                    <span class="font-display text-2xl lg:text-3xl font-bold text-white group-hover:text-crimson transition-colors">
+                      {item.label}
+                    </span>
+                    <svg class="w-6 h-6 text-slate-500 group-hover:text-crimson transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                  
+                  {item.dropdown && (
+                    <div class="py-4 pl-4 space-y-2">
+                      {item.dropdown.map((subItem) => (
+                        <a 
+                          href={subItem.href}
+                          class="block py-2 text-slate-400 hover:text-white transition-colors"
+                        >
+                          {subItem.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
+          
+          <!-- Secondary Links & Contact -->
+          <div class="lg:pl-12 lg:border-l lg:border-charcoal-700">
+            <div class="mb-8">
+              <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Quick Links</h3>
+              <div class="space-y-3">
+                {navigation.secondaryNav?.map((item) => (
+                  <a 
+                    href={item.href}
+                    class="block text-slate-300 hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Contact</h3>
+              <div class="space-y-3 text-slate-300">
+                {company.phone && <p>{company.phone}</p>}
+                {company.email && <p>{company.email}</p>}
+                {company.address && (
+                  <p>
+                    {company.address?.street && <>{company.address.street}<br /></>}
+                    {(company.address?.city || company.address?.state || company.address?.zip) && (
+                      <>{company.address?.city}, {company.address?.state} {company.address?.zip}</>
+                    )}
+                  </p>
+                )}
+              </div>
+              <div class="mt-6">
+                <a 
+                  href="/contact"
+                  class="inline-flex items-center justify-center px-6 py-3 bg-crimson text-white font-semibold rounded hover:bg-crimson-dark transition-colors"
+                >
+                  Contact Us
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const menuButton = document.getElementById('menu-button');
+  const menuClose = document.getElementById('menu-close');
+  const menuOverlay = document.getElementById('menu-overlay');
+  const menuIconOpen = document.getElementById('menu-icon-open');
+  const menuIconClose = document.getElementById('menu-icon-close');
+  
+  function openMenu() {
+    menuOverlay?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    menuIconOpen?.classList.add('hidden');
+    menuIconClose?.classList.remove('hidden');
+  }
+  
+  function closeMenu() {
+    menuOverlay?.classList.add('hidden');
+    document.body.style.overflow = '';
+    menuIconOpen?.classList.remove('hidden');
+    menuIconClose?.classList.add('hidden');
+  }
+  
+  menuButton?.addEventListener('click', openMenu);
+  menuClose?.addEventListener('click', closeMenu);
+  
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+</script>
